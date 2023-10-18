@@ -1,0 +1,5 @@
+export const DEFAULTS = {
+  NUMBER_OF_LINES: 500,
+  MAX_NUMBER_OF_LINES: 2000,
+  LOG_DIRECTORY: '/var/log',
+};

@@ -81,29 +81,6 @@ class LogsController {
     }
     return null;
   };
-
-  // public getLogByNameWithEntries = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  //   logger.debug(
-  //     'getLogWithEntries: ' +
-  //       JSON.stringify(
-  //         {
-  //           pathParams: req.params,
-  //           queryParams: req.query,
-  //         },
-  //         null,
-  //         2,
-  //       ),
-  //   );
-
-  //   const { logName, entries } = req.params;
-  //   console.log(logName, entries);
-  //   try {
-  //     const logs: string[] = await this.logsService.getLogByNameWithEntries(logName, entries as unknown as number);
-  //     res.status(200).json({ logs });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // };
 }
 
 export default LogsController;

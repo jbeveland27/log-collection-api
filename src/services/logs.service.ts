@@ -1,27 +1,16 @@
 import path from 'path';
-import { readdir, lstat } from 'fs/promises';
-import { DirectoryList } from '../interfaces/DirectoryList.interface';
-import readLastNLines from '../utils/readLastNLine';
-import { ParamsDto } from '../dtos/params.dto';
+import readLastNLines from '@utils/readLastNLine';
+import { ParamsDto } from '@dtos/params.dto';
 import { logger } from '@utils/logger';
 import { DEFAULTS } from '../constants';
+import { TreeNode, buildTree } from '@utils/buildTree';
 
 class LogsService {
-  public getLogs = async (): Promise<DirectoryList> => {
+  public getDirectoryListing = async (): Promise<TreeNode> => {
     try {
-      const directoryList = [],
-        filesList = [];
-      const files = await readdir(DEFAULTS.LOG_DIRECTORY);
-      for (const file of files) {
-        const fileDetails = await lstat(path.resolve(DEFAULTS.LOG_DIRECTORY, file));
-        if (fileDetails.isDirectory()) {
-          directoryList.push(file);
-        } else {
-          filesList.push(file);
-        }
-      }
+      const rootNode = buildTree(DEFAULTS.LOG_DIRECTORY);
 
-      return { directories: directoryList, files: filesList } as DirectoryList;
+      return rootNode;
     } catch (error) {
       logger.error('Unable to scan directory: ' + error);
       throw new Error(error);

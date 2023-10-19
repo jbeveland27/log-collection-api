@@ -12,7 +12,7 @@ export class LogRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.logs.getLogs);
+    this.router.get(`${this.path}`, this.logs.getDirectoryListing);
 
     // /logs/<LOGNAME>
     this.router.get(`${this.path}/:logName`, this.logs.getLogByNameWithEntries);

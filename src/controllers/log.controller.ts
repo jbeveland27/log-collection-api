@@ -1,18 +1,18 @@
 import { ParamsDto } from '@dtos/params.dto';
-import { DirectoryList } from '@interfaces/DirectoryList.interface';
 import LogsService from '@services/logs.service';
 import { logger } from '@utils/logger';
 import { validate } from 'class-validator';
 import { NextFunction, Request, Response } from 'express';
 import { DEFAULTS } from '../constants';
-import { LogResponse } from '../interfaces/LogResponse.interface';
+import { LogResponse } from '../interfaces/logResponse.interface';
+import { TreeNode } from '../utils/buildTree';
 
 class LogsController {
   public logsService = new LogsService();
 
-  public getLogs = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public getDirectoryListing = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     logger.debug(
-      'getLogs: ' +
+      'getDirectoryListing: ' +
         JSON.stringify(
           {
             pathParams: req.params,
@@ -24,8 +24,8 @@ class LogsController {
     );
 
     try {
-      const logs: DirectoryList = await this.logsService.getLogs();
-      res.status(200).json({ logs });
+      const nodes: TreeNode = await this.logsService.getDirectoryListing();
+      res.status(200).json(nodes);
     } catch (error) {
       next(error);
     }

@@ -1,10 +1,10 @@
 import { IsString, IsNotEmpty, IsOptional, Max, Min, IsNumber } from 'class-validator';
-import { MAX_NUMBER_OF_LINES } from '../config';
+import { MAX_NUMBER_OF_LINES, NUMBER_OF_LINES } from '../config';
 
 export class ParamsDto {
   constructor(logName: string, entries: number, search: string) {
     this.logName = logName;
-    this.entries = entries;
+    this.entries = entries || Number(NUMBER_OF_LINES);
     this.search = search;
   }
 

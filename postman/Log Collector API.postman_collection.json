@@ -1,0 +1,95 @@
+{
+	"info": {
+		"_postman_id": "96c1b10e-6218-4652-a493-684ba79f07f2",
+		"name": "Log Collector API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2579627"
+	},
+	"item": [
+		{
+			"name": "Get Directory Listing",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/logs",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"logs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Log By Name",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/logs/2023-10-17.log",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"logs",
+						"2023-10-17.log"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Log By Name With Entries",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/logs/2023-10-17.log/entries/10",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"logs",
+						"2023-10-17.log",
+						"entries",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Log By Name With Search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/logs/2023-10-17.log/entries/10?search=🚀",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"logs",
+						"2023-10-17.log",
+						"entries",
+						"10"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "🚀"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

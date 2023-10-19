@@ -52,6 +52,7 @@ cp .env.sample .env.development.local
 # NOTE: Start the backend first. It runs on port 3000 and the frontend is
 # configured to send traffic to that port via the proxy setting in package.json
 
+# Open 2 terminal windows / editors and run:
 # backend
 npm run dev
 

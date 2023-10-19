@@ -20,7 +20,7 @@ class LogsService {
   public getLogByNameWithEntries = async ({ logName, entries, search }: ParamsDto): Promise<string[]> => {
     const filePath = path.resolve(API_LOG_DIR, logName);
     const lines = await readLastNLines(filePath, entries);
-    logger.info(`File: ${filePath} numLines: ${entries} linesBeforeSearch: ${JSON.stringify(lines, null, 2)}`);
+    logger.debug(`File: ${filePath} numLines: ${entries} linesBeforeSearch: ${JSON.stringify(lines, null, 2)}`);
 
     if (search) {
       return lines.filter(l => l.includes(search));

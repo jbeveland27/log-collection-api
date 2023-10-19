@@ -1,5 +1,5 @@
 import { IsString, IsNotEmpty, IsOptional, Max, Min, IsNumber } from 'class-validator';
-import { DEFAULTS } from '../constants';
+import { MAX_NUMBER_OF_LINES } from '../config';
 
 export class ParamsDto {
   constructor(logName: string, entries: number, search: string) {
@@ -13,9 +13,9 @@ export class ParamsDto {
   logName: string;
 
   @IsOptional()
-  @IsNumber({}, { message: `Must be a number between 1 and ${DEFAULTS.MAX_NUMBER_OF_LINES}` })
+  @IsNumber({}, { message: `Must be a number between 1 and ${MAX_NUMBER_OF_LINES}` })
   @Min(1)
-  @Max(DEFAULTS.MAX_NUMBER_OF_LINES)
+  @Max(Number(MAX_NUMBER_OF_LINES))
   entries: number;
 
   @IsOptional()

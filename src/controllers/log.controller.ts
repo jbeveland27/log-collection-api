@@ -3,9 +3,9 @@ import LogsService from '@services/logs.service';
 import { logger } from '@utils/logger';
 import { validate } from 'class-validator';
 import { NextFunction, Request, Response } from 'express';
-import { DEFAULTS } from '../constants';
 import { LogResponse } from '../interfaces/logResponse.interface';
 import { TreeNode } from '../utils/buildTree';
+import { NUMBER_OF_LINES } from '../config';
 
 class LogsController {
   public logsService = new LogsService();
@@ -53,7 +53,7 @@ class LogsController {
 
       const params: ParamsDto = {
         logName: req.params.logName,
-        entries: Number(req.params.entries) || DEFAULTS.NUMBER_OF_LINES,
+        entries: Number(req.params.entries) || (NUMBER_OF_LINES as unknown as number),
         search: req.query.search as string,
       };
 

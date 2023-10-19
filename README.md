@@ -16,6 +16,7 @@ The main theme of the acceptance criteria had to do with building a REST API tha
 
 # Retrieves a log by name. By default we only return 500 lines, and at max 2000.
 /logs/:logName
+example: /logs/2023-10-17.log
 
 # Retrieves a log by name along with the specified number of entries. By default we only return 500 lines, and at max 2000.
 /logs/:logName/entries/:entries
@@ -28,9 +29,11 @@ example: /logs/2023-10-17.log/entries/100?search=🚀
 
 ### External Dependencies and the scheme behind the Search Algorithm
 
-The actual loading and searching through files is limited to using Node built-ins (primarily the `fs` module). The main idea for searching throught the file is contained in [utils/readLastNLine.ts](./backend/src/utils/readLastNLine.ts). Here you will find a simple utility function that uses a ReadStream for efficient reading of lines through the file (as opposed to loading an entire file into memory before processing). Since the desired outcome for the API is to return newest log events first, we utilize a circular buffer and _unshift/pop_ entries on and off the array while keeping a fixed size on the buffer (this achieves the desired order without needing to reverse the array later). This performs well enough for smaller files I tested with, but does start to see a performance degradation as file size increases (I tested with up to ~6GB file). This makes sense, as this approach still needs to read sequentially through a file and that will gradually slow down as files get larger and larger.
+The actual loading and searching through files is limited to using Node built-ins (primarily the `fs` module). The main idea for searching throught the file is contained in [utils/readLastNLine.ts](./backend/src/utils/readLastNLine.ts). Here you will find a simple utility function that uses a ReadStream for efficient reading of lines through the file (as opposed to loading an entire file into memory before processing). I iterated on a few ideas here for optimization, and was able to achieve ~5X improvement from a few small changes. Details are [in the file](./backend/src/utils/readLastNLine.ts#L26-L51).
 
-Without digging too deep, I think the next meaningful performance increase might be achieved by utilizing some combination of the approach above plus a local data store. Another thought was if we imposed some constraints on how much new/recent data we want to retrieve, there could be a way to read from the file using an offset and keeping track of positions in a local state cache. Ultimately, some form of caching/DB scheme is where I could see some meanginful performance improvements.
+This performs well enough for smaller files I tested with, but does start to see a performance degradation as file size increases (I tested with up to ~6GB file). This makes sense, as this approach still needs to read sequentially through a file and that will gradually slow down as files get larger and larger.
+
+Without digging too deep, I think the next meaningful performance increase might be achieved by utilizing some combination of the approach above plus a local data store. Another thought was if we imposed some constraints on how much new/recent data we want to retrieve, there could be a way to read from the file using an offset and keeping track of positions in a local state cache. Ultimately, some form of caching/DB scheme is where I could see some performance improvements.
 
 ## Usage
 
@@ -69,13 +72,12 @@ I tested the API with Postman locally, and included a Collection of these reques
 ## Limitations
 
 * Currently only return between 1 and 2000 lines as a design choice. As an improvement, it'd be nice to extend the route parameter options to allow pagination with cursors. This would enable more interesting usage in exploring Logs via API.
-* As mentioned above, searching through files begins to slow down as files get larger.
+* As mentioned above, searching through files begins to slow down as files get substantially larger.
 
 ## Known Issues
 
 * The UI opens to display a view of the directory tree. However, it needs to be filtered better (remove empty directories) and handle the click events more appropriately. Currently, if you have additional folders in your directory tree you're not able to browse and select a nested file. I think these issues are mostly due to my unfamiliarity with the TreeView component from MUI.
-* Need to double check that closing file handles is happening appropriately
-* Add URL encoding the filenames in the UI app when making API calls
+* Add URL encoding to path/query parameters in the UI app when making API calls
 
 ## Finishing touches I haven't gotten around to yet, but might within the next few days
 

@@ -1,20 +1,23 @@
 import * as fs from 'fs';
 import { logger } from './logger';
+import path from 'path';
 
 export class TreeNode {
   public id: number;
   public name: string;
+  public path: string;
   public children?: Array<TreeNode>;
 
-  constructor(id: number, path: string) {
+  constructor(id: number, name: string, path: string) {
     this.id = id;
-    this.name = path;
+    this.name = name;
+    this.path = path;
   }
 }
 
 export const buildTree = (rootPath: string) => {
   let counter = 1;
-  const root = new TreeNode(counter, rootPath);
+  const root = new TreeNode(counter, path.basename(rootPath), rootPath);
 
   const stack = [root];
 
@@ -23,7 +26,7 @@ export const buildTree = (rootPath: string) => {
 
     if (currentNode) {
       counter++;
-      const children = fs.readdirSync(currentNode.name);
+      const children = fs.readdirSync(currentNode.path);
 
       if (children && !currentNode.children) {
         currentNode.children = [];
@@ -31,12 +34,12 @@ export const buildTree = (rootPath: string) => {
 
       for (const child of children) {
         counter++;
-        const childPath = `${currentNode.name}/${child}`;
-        const childNode = new TreeNode(counter, childPath);
+        const childPath = `${currentNode.path}/${child}`;
+        const childNode = new TreeNode(counter, path.basename(childPath), childPath);
 
         currentNode.children.push(childNode);
         try {
-          if (fs.statSync(childNode.name).isDirectory()) {
+          if (fs.statSync(childNode.path).isDirectory()) {
             stack.push(childNode);
           }
         } catch (e) {

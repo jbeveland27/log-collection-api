@@ -53,7 +53,7 @@ class LogsController {
 
       const params: ParamsDto = {
         logName: req.params.logName,
-        entries: Number(req.params.entries) || (NUMBER_OF_LINES as unknown as number),
+        entries: Number(req.params.entries) || Number(NUMBER_OF_LINES),
         search: req.query.search as string,
       };
 

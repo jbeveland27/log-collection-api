@@ -1,0 +1,77 @@
+tags:
+  - name: logs
+    description: Searchable logs API
+
+paths:
+  # [GET] logs
+  /logs:
+    get:
+      tags:
+        - logs
+      summary: Retrieve a directory tree list from the configured log directory
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Server Error"
+
+  # [GET] logs/:logName
+  /logs/{logName}:
+    get:
+      tags:
+        - logs
+      summary: Retrieve default amount (typically 500) of entries from a specific log file
+      parameters:
+        - name: logName
+          in: path
+          description: The name of the log file to retrieve
+          required: true
+      responses:
+        200:
+          description: "Ok"
+        500:
+          description: "Server Error"
+
+  # [GET] logs/:logName
+  /logs/{logName}/entries/{number_of_entries}:
+    get:
+      tags:
+        - logs
+      summary: Retrieve entries from a specific log file
+      parameters:
+        - name: logName
+          in: path
+          description: The name of the log file to retrieve
+          required: true
+        - name: number_of_entries
+          in: path
+          description: The number of entries to retrieve from the log
+          required: true
+      responses:
+        200:
+          description: "Ok"
+        500:
+          description: "Server Error"
+
+# definitions
+definitions:
+  directoryTree:
+    type: object
+    required:
+      - id
+      - name
+      - path
+    properties:
+      id:
+        type: id
+        description: index identifier
+      name:
+        type: string
+        description: log file name
+      path:
+        type: string
+        description: fully-qualified path to file
+
+schemes:
+  - https
+  - http

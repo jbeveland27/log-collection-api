@@ -8,17 +8,17 @@ This repo contains a [backend Express API](./backend) and [frontend React app](.
 
 ### Acceptance criteria
 
-The main theme of the acceptance criteria had to do with building a REST API that could retrieve log lines from a given file. There are 3 endpoints available that satisfy these requirements:
+The main theme of the acceptance criteria had to do with building a REST API that could retrieve log lines from a given file. In the backend app, there are 3 endpoints available that satisfy these requirements:
 
 ```bash
-# Returns a tree of nodes representing the directory tree at /var/log (this path is hard-coded in local .env file).
+# Returns a tree of nodes representing the directory tree at /var/log (this path is hard-coded in local backend/.env file).
 /logs
 
 # Retrieves a log by name. By default we only return 500 lines, and at max 2000.
 /logs/:logName
 example: /logs/2023-10-17.log
 
-# Retrieves a log by name along with the specified number of entries. By default we only return 500 lines, and at max 2000.
+# Retrieves a log by name along with the specified number of entries. By default we only return 500 lines, and at max 100000.
 /logs/:logName/entries/:entries
 example: /logs/2023-10-17.log/entries/500
 
@@ -55,13 +55,17 @@ cp .env.sample .env.development.local
 # NOTE: Start the backend first. It runs on port 3000 and the frontend is
 # configured to send traffic to that port via the proxy setting in package.json
 
-# Open 2 terminal windows / editors and run:
-# backend
+# Open 2 terminal windows and run:
+# backend - defaults to port 3000 (backend/.env file setting)
 npm run dev
 
-# frontend - you'll be prompted to run on a different port, hit "y" to accept
+# frontend - defaults to port 3001 (frontend/.env file setting)
 npm start
 ```
+
+Visit <localhost:3001>. The contents of `/var/log` _should_ display in a directory tree list. Clicking a log entry will then display the most recent 500 lines (Note: at the moment only `utf8`-encoded files will display accurately). Using the search filters will refetch data from the API (rather than run client-side filtering on the fetched data).
+
+![File View with Log Entries](./screenshots/UI_1.png)
 
 ### Postman
 
@@ -69,19 +73,23 @@ I tested the API with Postman locally, and included a Collection of these reques
 
 **Note**: The API is hard-coded to look in `/var/log` for files. Modify your local `.env` if you have files stored elsewhere you want to use with the API. Also, you will need to modify the `:logName` path param in the requests to match files that are on your local filesystem.
 
+### Swagger / OpenAPI
+
+The backend API is also documented with a Swagger / OpenAPI doc and can be used for testing. To use, run the backend app and visit <localhost:3000/api-docs>.
+
+![OpenAPI](./screenshots/Swagger.png)
+
 ## Limitations
 
-* Currently only return between 1 and 2000 lines as a design choice. As an improvement, it'd be nice to extend the route parameter options to allow pagination with cursors. This would enable more interesting usage in exploring Logs via API.
+* Currently only return between 1 and 100000 lines as a design choice. As an improvement, it'd be nice to extend the route parameter options to allow pagination with cursors. This would enable more interesting usage in exploring Logs via API.
 * As mentioned above, searching through files begins to slow down as files get substantially larger.
 
 ## Known Issues
 
-* The UI opens to display a view of the directory tree. However, it needs to be filtered better (remove empty directories) and handle the click events more appropriately. Currently, if you have additional folders in your directory tree you're not able to browse and select a nested file. I think these issues are mostly due to my unfamiliarity with the TreeView component from MUI.
 * Add URL encoding to path/query parameters in the UI app when making API calls
 
 ## Finishing touches I haven't gotten around to yet, but might within the next few days
 
 * Testing
 * Production Build script / Dockerfile
-* Swagger/OpenAPI Documentation for the API
 * Bits of cleanup here and there

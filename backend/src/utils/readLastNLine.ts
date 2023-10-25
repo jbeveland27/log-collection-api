@@ -51,6 +51,11 @@ export function countFileLines(filePath) {
  */
 async function readLastNLines(filePath, numLines) {
   return new Promise<string[]>(async (resolve, reject) => {
+    if (!fs.existsSync(filePath)) {
+      logger.error(`File ${filePath} does not exist`);
+      reject(`File ${filePath} does not exist`);
+    }
+
     try {
       const numOfLinesInFile = await countFileLines(filePath);
 
@@ -81,8 +86,8 @@ async function readLastNLines(filePath, numLines) {
         resolve(lines);
       });
     } catch (error) {
-      logger.error('Error occurred while reading file');
-      throw new Error(error);
+      logger.error('Error occurred while reading file', error);
+      reject(error);
     }
   });
 }

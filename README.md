@@ -88,8 +88,8 @@ The backend API is also documented with a Swagger / OpenAPI doc and can be used 
 
 * Add URL encoding to path/query parameters in the UI app when making API calls
 
-## Finishing touches I haven't gotten around to yet, but might within the next few days
+## Possible future items
 
-* Testing
+* More robust testing of backend
 * Production Build script / Dockerfile
-* Bits of cleanup here and there
+* Misc cleanup

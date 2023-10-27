@@ -65,15 +65,15 @@ async function readLastNLines(filePath, numLines) {
         crlfDelay: Infinity,
       });
 
-      const lines = new Array(numLines);
-      const targetIndex = numOfLinesInFile - numLines;
+      const lines = new Array(Math.min(numOfLinesInFile, numLines));
+      const targetLineIndex = Math.max(numOfLinesInFile - numLines, 0);
       let lineCounter = 0;
       let arrCounter = 1;
 
       // main processing logic for each line
       rl.on('line', line => {
         lineCounter++;
-        if (lineCounter >= targetIndex) {
+        if (lineCounter >= targetLineIndex) {
           lines[lines.length - arrCounter++] = line;
         }
       });

@@ -129,11 +129,10 @@ export const FileViewer: React.FC<FileViewerProps> = (
               initialState={{
                 pagination: {
                   paginationModel: {
-                    pageSize: 20,
+                    pageSize: 25,
                   },
                 },
               }}
-              pageSizeOptions={[5]}
               disableRowSelectionOnClick
             />
           </Item>

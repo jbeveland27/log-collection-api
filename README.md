@@ -98,17 +98,7 @@ The backend API is also documented with a Swagger / OpenAPI doc and can be used 
 
 ![OpenAPI](./screenshots/Swagger.png)
 
-## Limitations
-
-* Currently only return between 1 and 100000 lines as a design choice. As an improvement, it'd be nice to extend the route parameter options to allow pagination with cursors. This would enable more interesting usage in exploring Logs via API.
-* As mentioned above, searching through files begins to slow down as files get substantially larger.
-
-## Known Issues
-
-* Add URL encoding to path/query parameters in the UI app when making API calls
-
 ## Possible future items
 
 * More robust testing of backend
 * Production Build script / Dockerfile
-* Misc cleanup

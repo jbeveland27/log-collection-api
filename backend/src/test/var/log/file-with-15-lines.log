@@ -1,0 +1,15 @@
+
+/dev/rdisk3s6: fsck_apfs started at Wed Oct 25 23:24:06 2023
+/dev/rdisk3s6: error: container /dev/rdisk3 is mounted with write access; please re-run with -l.
+/dev/rdisk3s6: fsck_apfs completed at Wed Oct 25 23:24:06 2023
+
+
+/dev/rdisk3s1s1: fsck_apfs started at Wed Oct 25 23:24:06 2023
+/dev/rdisk3s1s1: ** QUICKCHECK ONLY; FILESYSTEM CLEAN
+/dev/rdisk3s1s1: fsck_apfs completed at Wed Oct 25 23:24:06 2023
+
+
+/dev/rdisk3s3: fsck_apfs started at Wed Oct 25 23:24:34 2023
+/dev/rdisk3s3: ** QUICKCHECK ONLY; FILESYSTEM CLEAN
+/dev/rdisk3s3: fsck_apfs completed at Wed Oct 25 23:24:35 2023
+

@@ -27,13 +27,9 @@ example: /logs/2023-10-17.log/entries/500
 example: /logs/2023-10-17.log/entries/100?search=🚀
 ```
 
-### External Dependencies and the scheme behind the Search Algorithm
+### External Dependencies and the scheme behind searching through files
 
-The actual loading and searching through files is limited to using Node built-ins (primarily the `fs` module). The main idea for searching throught the file is contained in [utils/readLastNLine.ts](./backend/src/utils/readLastNLine.ts). Here you will find a simple utility function that uses a ReadStream for efficient reading of lines through the file (as opposed to loading an entire file into memory before processing). I iterated on a few ideas here for optimization, and was able to achieve ~5X improvement from a few small changes. Details are [in the file](./backend/src/utils/readLastNLine.ts#L26-L51).
-
-This performs well enough for smaller files I tested with, but does start to see a performance degradation as file size increases (I tested with up to ~6GB file). This makes sense, as this approach still needs to read sequentially through a file and that will gradually slow down as files get larger and larger.
-
-Without digging too deep, I think the next meaningful performance increase might be achieved by utilizing some combination of the approach above plus a local data store. Another thought was if we imposed some constraints on how much new/recent data we want to retrieve, there could be a way to read from the file using an offset and keeping track of positions in a local state cache. Ultimately, some form of caching/DB scheme is where I could see some performance improvements.
+The actual loading and searching through files is limited to using Node built-ins (primarily the `fs` module). The main implementation for searching throught the file is contained in [utils/readFileLines.ts](./backend/src/utils/readFileLines.ts).
 
 ## Usage
 
@@ -66,6 +62,21 @@ npm start
 Visit <localhost:3001>. The contents of `/var/log` _should_ display in a directory tree list. Clicking a log entry will then display the most recent 500 lines (Note: at the moment only `utf8`-encoded files will display accurately). Using the search filters will refetch data from the API (rather than run client-side filtering on the fetched data).
 
 ![File View with Log Entries](./screenshots/UI_1.png)
+
+### Testing
+
+There are also some Jest tests included:
+
+```bash
+# Run all tests
+npm run test
+
+# Run tests continuously
+npm run test:watch
+
+# Coverage test
+npm run test:coverage
+```
 
 ### Postman
 

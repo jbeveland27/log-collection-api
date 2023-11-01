@@ -181,22 +181,6 @@ export async function readLastLinesFromEndOfFile(
     }
 
     ({ contents, lineCount, lines } = processLines(contents, lineCount, maxLineCount, lines, processedCharsCount, stat, search));
-    // if (contents.includes('\n')) {
-    //   const split = contents.split('\n');
-    //   for (let i = split.length - 1; i > 0 && lineCount < maxLineCount; i--) {
-    //     const currLine = split[i];
-    //     if (search && currLine.includes(search)) {
-    //       lines[lineCount] = split[i];
-    //       lineCount++;
-    //     }
-
-    //     if (!search) {
-    //       lines[lineCount] = split[i];
-    //       lineCount++;
-    //     }
-    //   }
-    //   contents = split[0];
-    // }
 
     processedCharsCount += CHUNK_SIZE;
   }
@@ -222,22 +206,6 @@ export async function readLastLinesFromEndOfFile(
     // and append to the last chunk
     contents = lastChunk + contents;
     ({ lines } = processLines(contents, lineCount, maxLineCount, lines, processedCharsCount, stat, search));
-    // if (contents.includes('\n')) {
-    //   const split = contents.split('\n');
-
-    //   for (let i = split.length - 1; i >= 0 && lineCount < maxLineCount; i--) {
-    //     const currLine = split[i];
-    //     if (search && currLine.includes(search)) {
-    //       lines[lineCount] = split[i];
-    //       lineCount++;
-    //     }
-
-    //     if (!search) {
-    //       lines[lineCount] = split[i];
-    //       lineCount++;
-    //     }
-    //   }
-    // }
   }
 
   fs.closeSync(file);

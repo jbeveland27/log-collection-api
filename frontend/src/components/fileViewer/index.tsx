@@ -3,6 +3,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useAxios } from "../../hooks/useAxios";
 import { Item } from "../item";
+import { MAX_LINES } from "../../utils/constants";
 
 const LOGS_API_ENDPOINT = "/logs";
 
@@ -60,7 +61,7 @@ export const FileViewer: React.FC<FileViewerProps> = (
                   defaultValue={entries}
                   fullWidth
                   id="standard-basic"
-                  label="Number of Logs to fetch (max 2000 lines)"
+                  label={`Number of Logs to fetch (max  ${MAX_LINES} lines)`}
                   variant="standard"
                   onChange={handleSetEntries}
                 />

@@ -53,7 +53,7 @@ const renderDirectoryTree = (data: RenderTree, selectEntry: any) => {
       <TreeView
         aria-label="directory tree"
         defaultCollapseIcon={<ExpandMoreIcon />}
-        defaultExpanded={["/var/log"]}
+        defaultExpanded={[process.env.REACT_APP_API_LOG_DIR as string]}
         defaultExpandIcon={<ChevronRightIcon />}
         onNodeSelect={selectEntry}
       >

@@ -30,14 +30,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/logs/2023-10-17.log",
+					"raw": "localhost:3000/logs/file-with-15-lines.log",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"logs",
-						"2023-10-17.log"
+						"file-with-15-lines.log"
 					]
 				}
 			},
@@ -49,14 +49,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/logs/2023-10-17.log/entries/10",
+					"raw": "localhost:3000/logs/file-with-15-lines.log/entries/10",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"logs",
-						"2023-10-17.log",
+						"file-with-15-lines.log",
 						"entries",
 						"10"
 					]
@@ -70,14 +70,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/logs/2023-10-17.log/entries/10?search=🚀",
+					"raw": "localhost:3000/logs/file-with-15-lines.log/entries/10?search=🚀",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"logs",
-						"2023-10-17.log",
+						"file-with-15-lines.log",
 						"entries",
 						"10"
 					],

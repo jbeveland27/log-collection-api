@@ -11,7 +11,7 @@ This repo contains a [backend Express API](./backend) and [frontend React app](.
 The main theme of the acceptance criteria had to do with building a REST API that could retrieve log lines from a given file. In the backend app, there are 3 endpoints available that satisfy these requirements:
 
 ```bash
-# Returns a tree of nodes representing the directory tree at /var/log (this path is hard-coded in local backend/.env file).
+# Returns a tree of nodes representing the directory tree at backend/src/test/var/log (this path is hard-coded in local backend/.env and frontend/.env files).
 /logs
 
 # Retrieves a log by name. By default we only return 500 lines, and at max 2000.
@@ -59,9 +59,17 @@ npm run dev
 npm start
 ```
 
-Visit <localhost:3001>. The contents of `/var/log` _should_ display in a directory tree list. Clicking a log entry will then display the most recent 500 lines (Note: at the moment only `utf8`-encoded files will display accurately). Using the search filters will refetch data from the API (rather than run client-side filtering on the fetched data).
+Visit <localhost:3001>. The contents of `backend/src/test/var/log` _should_ display in a directory tree list. Clicking a log entry will then display the most recent 500 lines (Note: at the moment only `utf8`-encoded files will display accurately). Using the search filters will refetch data from the API (rather than run client-side filtering on the fetched data).
+
+![Directory Tree List](./screenshots/UI_2.png)
 
 ![File View with Log Entries](./screenshots/UI_1.png)
+
+### Env
+
+In the prevoius section, it was mentioned to copy the `.env.sample` file and modify as needed for your setup. Pay special attention to the value of `API_LOG_DIR`, and ensure the corresponding value of `REACT_APP_API_LOG_DIR` in `frontend/.env` is set to the same value. This should make it so the UI and backend use a consistent directory for viewing and querying.
+
+By default, this value is set to `src/test/var/log` to use the sample logs included with this repo.
 
 ### Testing
 
@@ -82,7 +90,7 @@ npm run test:coverage
 
 I tested the API with Postman locally, and included a Collection of these requests so they can be imported for others to use. This Collection is available in the [postman](./postman/) directory.
 
-**Note**: The API is hard-coded to look in `/var/log` for files. Modify your local `.env` if you have files stored elsewhere you want to use with the API. Also, you will need to modify the `:logName` path param in the requests to match files that are on your local filesystem.
+**Note**: The API is hard-coded to look in `backend/src/test/var/log` for files. Modify your local `backend/.env` if you have files stored elsewhere you want to use with the API. Also, you will need to modify the `:logName` path param in the requests to match files that are on your local filesystem.
 
 ### Swagger / OpenAPI
 

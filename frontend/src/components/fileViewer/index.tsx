@@ -23,20 +23,26 @@ export const FileViewer: React.FC<FileViewerProps> = (
   const [entries, setEntries] = useState(500);
   const [query, setQuery] = useState("");
   const [url, setUrl] = useState(
-    `${LOGS_API_ENDPOINT}/${file.substring(9)}/entries/${entries}`
+    `${LOGS_API_ENDPOINT}/${encodeURIComponent(
+      file.replace((process.env.REACT_APP_API_LOG_DIR as string) + "/", "")
+    )}/entries/${entries}`
   );
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     if (query.length > 0) {
       return setUrl(
-        `${LOGS_API_ENDPOINT}/${file.substring(
-          9
+        `${LOGS_API_ENDPOINT}/${encodeURIComponent(
+          file.replace((process.env.REACT_APP_API_LOG_DIR as string) + "/", "")
         )}/entries/${entries}?search=${query}`
       );
     }
 
-    setUrl(`${LOGS_API_ENDPOINT}/${file.substring(9)}/entries/${entries}`);
+    setUrl(
+      `${LOGS_API_ENDPOINT}/${encodeURIComponent(
+        file.replace((process.env.REACT_APP_API_LOG_DIR as string) + "/", "")
+      )}/entries/${entries}`
+    );
   };
 
   const handleSetEntries = (event: React.ChangeEvent<HTMLInputElement>) => {

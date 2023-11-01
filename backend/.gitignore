@@ -14,6 +14,11 @@ node_modules/
 dist
 dist-ssr
 
+#test
+coverage
+!src/test/var/log/*
+!src/test/var/log/testDir/*
+
 # dotenv environment variable files
 .env
 .env.development.local

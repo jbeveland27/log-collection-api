@@ -43,7 +43,7 @@ describe('readFileLines', () => {
     expect(lines[0]).toBe('/dev/rdisk2s1: fsck_apfs completed at Wed Nov  1 00:18:33 2023');
   });
 
-  it('should return exactly 1 line', async () => {
+  it('should return exactly 1 empty line', async () => {
     expect.assertions(3);
     const fileWithLines = path.join(initialPath, 'file-with-15-lines.log');
     const entries = 1;

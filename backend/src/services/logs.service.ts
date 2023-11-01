@@ -1,10 +1,10 @@
 import path from 'path';
-import readLastNLines from '@utils/readLastNLine';
 import { ParamsDto } from '@dtos/params.dto';
 import { logger } from '@utils/logger';
 import { TreeNode, buildTree } from '@utils/buildTree';
 import { API_LOG_DIR } from '@config';
 import { HttpException } from '../exceptions/HttpException';
+import { readLastLinesFromEndOfFile } from '../utils/readFileLines';
 
 class LogsService {
   public getDirectoryListing = async (): Promise<TreeNode> => {
@@ -21,12 +21,8 @@ class LogsService {
   public getLogByNameWithEntries = async ({ logName, entries, search }: ParamsDto): Promise<string[]> => {
     try {
       const filePath = path.resolve(API_LOG_DIR, logName);
-      const lines = await readLastNLines(filePath, entries);
+      const lines = await readLastLinesFromEndOfFile(filePath, entries, 'utf-8', search);
       logger.debug(`File: ${filePath} numLines: ${entries} linesBeforeSearch: ${JSON.stringify(lines, null, 2)}`);
-
-      if (search) {
-        return lines.filter(l => l.includes(search));
-      }
 
       return lines;
     } catch (error) {

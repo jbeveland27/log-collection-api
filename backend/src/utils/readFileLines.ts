@@ -15,6 +15,7 @@ const CHUNK_SIZE: number = 100 * 1024;
  * @param {number} currentCharacterCount - current number of characters that have been processed in file
  * @param {BufferEncoding} encoding      - character encoding to use; defaults to utf-8
  * @param {number} chunkSize             - size of chunks that should be read in, defaults to CHUNK_SIZE
+ *
  * @returns {promise} a promise resolved with the file data or rejected with an error
  */
 async function readChunk(
@@ -39,6 +40,7 @@ async function readChunk(
 /**
  * Helper function for loading file stats
  * @param {string} filePath  - path to file
+ *
  * @returns {promise} a promise resolved with the file stats or rejected with an error
  */
 async function loadFileStats(filePath: string): Promise<fs.Stats> {
@@ -83,32 +85,17 @@ async function openFile(filePath: string): Promise<number> {
  * @param {string} search               - search string to filter results
  * @param {boolean} processedCharsCount - current number of characters that have been processed in file
  * @param {fs.Stats} stat               - object providing information about the file
+ *
  * @returns an object containing the modified contents, lineCount, and lines
  */
-function processLines(
-  contents: string,
-  lineCount: number,
-  maxLineCount: number,
-  lines: string[],
-  processedCharsCount: number,
-  stat: fs.Stats,
-  search?: string,
-) {
+function processLines(contents: string, lineCount: number, maxLineCount: number, lines: string[], processedCharsCount: number, stat: fs.Stats) {
   if (contents.includes('\n')) {
     const split = contents.split('\n');
 
     // load into lines array in reverse chronological order
     for (let i = split.length - 1; i > 0 && lineCount < maxLineCount; i--) {
-      const currLine = split[i];
-      if (search && currLine.includes(search)) {
-        lines[lineCount] = currLine;
-        lineCount++;
-      }
-
-      if (!search) {
-        lines[lineCount] = split[i];
-        lineCount++;
-      }
+      lines[lineCount] = split[i];
+      lineCount++;
     }
 
     // processing loop will continue to read more chunks in; if we're
@@ -117,15 +104,8 @@ function processLines(
       contents = split[0];
     } else if (lineCount < maxLineCount) {
       // Here's we're in the final chunk, so need to set last line
-      if (search && split[0].includes(search)) {
-        lines[lineCount] = split[0];
-        lineCount++;
-      }
-
-      if (!search) {
-        lines[lineCount] = split[0];
-        lineCount++;
-      }
+      lines[lineCount] = split[0];
+      lineCount++;
     }
   }
 
@@ -180,7 +160,7 @@ export async function readLastLinesFromEndOfFile(
       contents = contents.slice(0, -1);
     }
 
-    ({ contents, lineCount, lines } = processLines(contents, lineCount, maxLineCount, lines, processedCharsCount, stat, search));
+    ({ contents, lineCount, lines } = processLines(contents, lineCount, maxLineCount, lines, processedCharsCount, stat));
 
     processedCharsCount += CHUNK_SIZE;
   }
@@ -205,10 +185,20 @@ export async function readLastLinesFromEndOfFile(
     // Grab any bytes that were left over from last iteration
     // and append to the last chunk
     contents = lastChunk + contents;
-    ({ lines } = processLines(contents, lineCount, maxLineCount, lines, processedCharsCount, stat, search));
+    ({ lines } = processLines(contents, lineCount, maxLineCount, lines, processedCharsCount, stat));
   }
 
   fs.closeSync(file);
+
+  // Note: criteria stated `ability to filter the results based on basic text/keyword matches`
+  // Here, we're filtering the lines _after_ searching through the file for the desired
+  // number of entries. I had a version of this function where it searched through the file
+  // with the search phrase as lines were processed, but it suffered a severe slowdown and limited
+  // the number of logs that could be fetched. The implementation would need to be reworked to
+  // facilitate searching and returning X total logs.
+  if (search) {
+    return lines.filter(l => l.includes(search));
+  }
 
   return lines;
 }

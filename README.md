@@ -73,6 +73,8 @@ By default, this value is set to `src/test/var/log` to use the sample logs inclu
 
 ### Testing
 
+#### Jest
+
 There are also some Jest tests included:
 
 ```bash
@@ -85,6 +87,33 @@ npm run test:watch
 # Coverage test
 npm run test:coverage
 ```
+
+#### Benchmarks / Load Testing
+
+There are two benchmark testing tools for testing out performance of the API - `autocannon` and `k6`
+
+To use `autocannon`, modify the `test:autocannon` script to point to a local endpoint. Then run `npm run test:autocannon` to simulate a simple load test.
+
+For a more complex use case, there's also an included script for k6. This script contains 2 scenarios which simulate the stream of requests in slightly different ways.
+
+To use this included script, first [download k6](https://k6.io/docs/getting-started/installation). Then run backend app with the default `src/test/var/log` directory configured as the log source.
+
+```bash
+# Run default scenario (constant-vus)
+» k6 run load-test/k6.js
+
+# Run specific scenario using env var
+» k6 run --env SCENARIO=testFilesWithVariableEntries_ConstantVus load-test/k6.js
+```
+
+Available Scenarios found in [backend/load-test/scenarios.js](./backend/load-test/scenarios.js):
+
+1. `testFilesWithVariableEntries_ConstantArrivalRate` - A fixed number of iterations are executed in a specified period of time (i.e. constant arrival rate of concurrent requests).
+2. `testFilesWithVariableEntries_ConstantVus` - fixed number of VUs execute as many iterations as possible for a specified amount of time (i.e. constant number of users).
+
+Note: From this testing, upper limit seems to be around 2.4k requests per second, when retrieving a random 1-1k entries.
+
+![k6](./screenshots/k6.png)
 
 ### Postman
 

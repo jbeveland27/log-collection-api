@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import { logger } from './logger';
+import { HttpException } from '../exceptions/HttpException';
 
 /**
  * Number of bytes to read in at a time; larger number will allow faster processing
@@ -133,7 +134,7 @@ export async function readLastLinesFromEndOfFile(
 ): Promise<string[]> {
   if (!fs.existsSync(filePath)) {
     logger.error(`File ${filePath} does not exist`);
-    throw new Error(`File ${filePath} does not exist`);
+    throw new HttpException(400, `File ${filePath} does not exist`);
   }
 
   const [stat, file] = await Promise.all([loadFileStats(filePath), openFile(filePath)]);

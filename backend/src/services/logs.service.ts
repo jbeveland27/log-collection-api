@@ -20,13 +20,19 @@ class LogsService {
 
   public getLogByNameWithEntries = async ({ logName, entries, search }: ParamsDto): Promise<string[]> => {
     try {
+      const basePath = path.resolve(API_LOG_DIR);
       const filePath = path.resolve(API_LOG_DIR, logName);
+
+      if (filePath.indexOf(basePath) !== 0) {
+        throw new HttpException(400, 'Access denied: Invalid path');
+      }
+
       const lines = await readLastLinesFromEndOfFile(filePath, entries, 'utf-8', search);
       logger.debug(`File: ${filePath} numLines: ${entries} linesBeforeSearch: ${JSON.stringify(lines, null, 2)}`);
 
       return lines;
     } catch (error) {
-      throw new HttpException(400, error);
+      throw new HttpException(error.status, error.message);
     }
   };
 }

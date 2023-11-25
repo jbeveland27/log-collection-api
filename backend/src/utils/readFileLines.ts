@@ -132,12 +132,17 @@ export async function readLastLinesFromEndOfFile(
   encoding: BufferEncoding = 'utf8',
   search?: string,
 ): Promise<string[]> {
-  if (!fs.existsSync(filePath)) {
-    logger.error(`File ${filePath} does not exist`);
-    throw new HttpException(400, `File ${filePath} does not exist`);
+  let stat, file;
+  try {
+    [stat, file] = await Promise.all([loadFileStats(filePath), openFile(filePath)]);
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      logger.error(`File ${filePath} does not exist`);
+      throw new HttpException(400, `File ${filePath} does not exist`);
+    } else {
+      throw new HttpException(400, `Failed to read ${filePath}`);
+    }
   }
-
-  const [stat, file] = await Promise.all([loadFileStats(filePath), openFile(filePath)]);
 
   let processedCharsCount = CHUNK_SIZE;
   let lineCount = 0;
@@ -189,7 +194,11 @@ export async function readLastLinesFromEndOfFile(
     ({ lines } = processLines(contents, lineCount, maxLineCount, lines, processedCharsCount, stat));
   }
 
-  fs.closeSync(file);
+  try {
+    await fs.close(file);
+  } catch (err) {
+    logger.error('Failed to close file', err);
+  }
 
   // Note: criteria stated `ability to filter the results based on basic text/keyword matches`
   // Here, we're filtering the lines _after_ searching through the file for the desired

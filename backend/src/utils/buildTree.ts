@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import * as fs from 'fs/promises';
 import { logger } from './logger';
 import path from 'path';
 
@@ -15,7 +15,7 @@ export class TreeNode {
   }
 }
 
-export const buildTree = (rootPath: string) => {
+export const buildTree = async (rootPath: string) => {
   let counter = 1;
   const root = new TreeNode(counter, path.basename(rootPath), rootPath);
 
@@ -25,8 +25,7 @@ export const buildTree = (rootPath: string) => {
     const currentNode = stack.pop();
 
     if (currentNode) {
-      counter++;
-      const children = fs.readdirSync(currentNode.path);
+      const children = await fs.readdir(currentNode.path);
 
       if (children && !currentNode.children) {
         currentNode.children = [];
@@ -39,11 +38,12 @@ export const buildTree = (rootPath: string) => {
 
         currentNode.children.push(childNode);
         try {
-          if (fs.statSync(childNode.path).isDirectory()) {
+          const stat = await fs.stat(childNode.path);
+          if (stat.isDirectory()) {
             stack.push(childNode);
           }
         } catch (e) {
-          logger.info(e);
+          logger.debug(e);
         }
       }
     }

@@ -4,15 +4,15 @@ import { buildTree } from './buildTree';
 describe('buildTree', () => {
   const initialPath = path.join(__dirname, '../test/var/log');
 
-  it('should return root node', () => {
-    const rootNode = buildTree(initialPath);
+  it('should return root node', async () => {
+    const rootNode = await buildTree(initialPath);
     expect(rootNode).not.toBeNull();
     expect(rootNode).toHaveProperty('path', initialPath);
     expect(rootNode).toHaveProperty('children');
   });
 
-  it('should return root node with exactly 5 children', () => {
-    const rootNode = buildTree(initialPath);
+  it('should return root node with exactly 5 children', async () => {
+    const rootNode = await buildTree(initialPath);
     expect(rootNode.children.length).toEqual(5);
 
     const childrenPath = rootNode.children.map(child => child.path);
@@ -23,8 +23,8 @@ describe('buildTree', () => {
     expect(childrenPath.includes(`${initialPath}/file-with-newline.log`)).toEqual(true);
   });
 
-  it('should add testDir node with its children inside root', () => {
-    const rootNode = buildTree(initialPath);
+  it('should add testDir node with its children inside root', async () => {
+    const rootNode = await buildTree(initialPath);
     const testDir = rootNode.children.find(child => child.path === `${initialPath}/testDir`);
 
     expect(testDir).not.toBeNull();

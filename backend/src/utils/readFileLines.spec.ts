@@ -9,7 +9,7 @@ describe('readFileLines', () => {
     expect.assertions(1);
 
     const filePath = 'invalid';
-    expect(async () => {
+    await expect(async () => {
       await readLastLinesFromEndOfFile(filePath, DEFAULT_ENTRIES);
     }).rejects.toThrow(`File ${filePath} does not exist`);
   });
